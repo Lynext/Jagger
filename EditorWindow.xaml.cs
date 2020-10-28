@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,58 +30,90 @@ namespace Jagger
         public void updateList()
         {
             SongList.Items.Clear();
-            for (int j = 0; j < Vars.songList.Count; j++)
+            List<Song> songListSorted = Vars.songList.ToList();
+            songListSorted.Sort((a, b) => a.checkFormat().CompareTo(b.checkFormat()));
+            int correctCount = 0;
+            for (int j = 0; j < songListSorted.Count; j++)
             {
-                Song i = Vars.songList[j];
+                Song i = songListSorted[j];
+                if (i.checkFormat())
+                {
+                    correctCount++;
+                    if (OnlyShowWrong.IsChecked == true)
+                        continue;
+                }
                 ListBoxItem lbi = new ListBoxItem();
                 lbi.Content = i.FullName;
                 if (i.checkFormat())
-                    lbi.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FF29805C"));
+                    lbi.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FF29805C"));
                 else
-                    lbi.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FF802929"));
+                    lbi.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FF802929"));
                 lbi.PreviewMouseLeftButtonDown += clickedListBoxItem;
-                lbi.Tag = j;
+                lbi.Tag = new int[2] { i.index, SongList.Items.Count};
                 SongList.Items.Add(lbi);
             }
+            int percent = (int)(((float)correctCount / (float)Vars.songList.Count) * 100.0f);
+            IndexLabel.Content = (index + 1).ToString() + " / " + SongList.Items.Count.ToString();
+            CompletedLabel.Content = "%" + percent.ToString() + " Completed";
+            CompletedBar.Value = percent;
         }
 
         public void clickedListBoxItem(object sender, MouseButtonEventArgs e)
         {
             ListBoxItem item = (ListBoxItem)sender;
             saveCurrent();
-            loadIndex((int)item.Tag);
+            loadIndex(((int[])item.Tag)[1]);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            updateList();
             loadIndex(index);
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            Vars.songList[index].Name = NameBox.Text;
-            Vars.songList[index].Artists = ArtistsBox.Text;
+            saveCurrent();
             Vars.main.updateList();
             Vars.editorWindow = null;
         }
 
         public void saveCurrent()
         {
-            Vars.songList[index].Name = NameBox.Text;
-            Vars.songList[index].Artists = ArtistsBox.Text;
+            if (index >= SongList.Items.Count)
+            {
+                Console.WriteLine("ERROR CANT SAVE, INDEX WAS BIGGER THAN SONGLIST COUNT");
+                return;
+            }
+            int realSongIndex = ((int[])((ListBoxItem)SongList.Items[index]).Tag)[0];
+            if (Vars.songList[realSongIndex].Name.ToString() != NameBox.Text.ToString() || Vars.songList[realSongIndex].Artists.ToString() != ArtistsBox.Text.ToString())
+            {
+                Console.WriteLine(Vars.songList[realSongIndex].Name + " | " + NameBox.Text);
+                Console.WriteLine(Vars.songList[realSongIndex].Artists + " | " + ArtistsBox.Text);
+                Vars.unsavedContent = true;
+            }
+            Vars.songList[realSongIndex].Name = NameBox.Text;
+            Vars.songList[realSongIndex].Artists = ArtistsBox.Text;
             Vars.main.updateList();
             updateList();
+            Helper.calculateAllArtists();
         }
 
         public void loadIndex(int ind)
         {
             index = ind;
-            NameBox.Text = Vars.songList[index].Name;
-            ArtistsBox.Text = Vars.songList[index].Artists;
-            BPMLabel.Content = Vars.songList[index].BPM.ToString() + " BPM";
-            KeyLabel.Content = Vars.songList[index].Key;
-            IndexLabel.Content = (index + 1).ToString() + " / " + Vars.songList.Count.ToString();
-            if (Vars.songList[index].checkFormat())
+            if (ind >= SongList.Items.Count)
+            {
+                Console.WriteLine("ERROR CANT LOAD, INDEX WAS BIGGER THAN SONGLIST COUNT");
+                return;
+            }
+            int realSongIndex = ((int[])((ListBoxItem)SongList.Items[index]).Tag)[0];
+            NameBox.Text = Vars.songList[realSongIndex].Name;
+            ArtistsBox.Text = Vars.songList[realSongIndex].Artists;
+            BPMLabel.Content = Vars.songList[realSongIndex].BPM.ToString() + " BPM";
+            KeyLabel.Content = Vars.songList[realSongIndex].Key;
+            IndexLabel.Content = (index + 1).ToString() + " / " + SongList.Items.Count.ToString();
+            if (Vars.songList[realSongIndex].checkFormat())
             {
                 OKImage.Source = new BitmapImage(new Uri(@"/Jagger;component/icons8-checkmark-48.png", UriKind.Relative));
             }
@@ -97,7 +130,7 @@ namespace Jagger
             saveCurrent();
 
             index++;
-            if (index == Vars.songList.Count)
+            if (index == SongList.Items.Count)
             {
                 index = 0;
             }
@@ -111,9 +144,23 @@ namespace Jagger
             index--;
             if (index == -1)
             {
-                index = Vars.songList.Count - 1;
+                index = SongList.Items.Count - 1;
             }
             loadIndex(index);
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            index = 0;
+            loadIndex(index);
+            updateList();
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            index = 0;
+            loadIndex(index);
+            updateList();
         }
     }
 }

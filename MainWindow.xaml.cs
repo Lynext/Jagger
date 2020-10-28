@@ -36,10 +36,19 @@ namespace Jagger
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Vars.songList.Add(new Song() { Name = "Umrumda Değil", BPM = 140, Key = "2A" });
-            Vars.songList.Add(new Song() { Name = "Paranoya", BPM = 140, Key = "1A" });
-            Vars.songList.Add(new Song() { Name = "Neyim Var Ki", BPM = 90, Key = "11A" });
-            SongList.ItemsSource = Vars.songList;
+            if (Properties.Settings.Default.FolderLocation == "None")
+            {
+                if (!selectMainFolder())
+                {
+                    Application.Current.Shutdown();
+                    return;
+                }
+            }
+            else
+            {
+                Vars.folderPath = (string)Properties.Settings.Default.FolderLocation;
+                loadFromFolder();
+            }
 
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(SongList.ItemsSource);
             view.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
@@ -86,6 +95,20 @@ namespace Jagger
             {
                 return false;
             }
+            if (Vars.artistsFilter.Count > 0)
+            {
+                bool containsAny = false;
+                foreach (string i in Vars.artistsFilter)
+                {
+                    if ((item as Song).ArtistsList.Contains(i))
+                    {
+                        containsAny = true;
+                        break;
+                    }
+                }
+                if (containsAny == false)
+                    return false;
+            }
             return true;
         }
 
@@ -102,22 +125,45 @@ namespace Jagger
             updateList();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public void loadFromFolder()
+        {
+            Vars.songList.Clear();
+            List<string> files = Directory.GetFiles(Vars.folderPath).ToList();
+            foreach (string i in files)
+            {
+                if (!(i.EndsWith(".mp3") || i.EndsWith(".m4a")))
+                    continue;
+                Song newSong = Helper.getFromFile(i);
+                newSong.index = Vars.songList.Count();
+                Vars.songList.Add(newSong);
+            }
+            Helper.calculateAllArtists();
+            SongList.ItemsSource = Vars.songList;
+            updateList();
+        }
+
+        public bool selectMainFolder()
         {
             var ookiiDialog = new VistaFolderBrowserDialog();
             if (ookiiDialog.ShowDialog() == true)
             {
                 Vars.folderPath = ookiiDialog.SelectedPath;
-                Vars.songList.Clear();
-                List<string> files = Directory.GetFiles(Vars.folderPath).ToList();
-                foreach (string i in files)
-                {
-                    Vars.songList.Add(Helper.getFromFile(i));
-                }
-                updateList();
+                Properties.Settings.Default.FolderLocation = Vars.folderPath;
+                Properties.Settings.Default.Save();
+                loadFromFolder();
+                return true;
             }
+            return false;
+        }
 
-
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (Vars.editorWindow != null || Vars.filterWindow != null)
+            {
+                MessageBox.Show("Close other windows before loading.", "Jagger", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            selectMainFolder();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -131,7 +177,21 @@ namespace Jagger
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            Application.Current.Shutdown();
+            if (Vars.unsavedContent == false)
+            {
+                Application.Current.Shutdown();
+                return;
+            }
+            MessageBoxResult dialogResult = MessageBox.Show("UNSAVED CONTENT. EXIT ?", "Jagger", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+            if (dialogResult == MessageBoxResult.Yes)
+            {
+                Application.Current.Shutdown();
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+            
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -150,6 +210,7 @@ namespace Jagger
                 Helper.SetID3(i, i.path);
             }
             MessageBox.Show("Save successful", "Jagger", MessageBoxButton.OK, MessageBoxImage.Information);
+            Vars.unsavedContent = false;
         }
     }
 }

@@ -35,13 +35,15 @@ namespace Jagger
         public string FullName {
             get { return Artists + " - " + Name; }
         }
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
 
-        public int BPM { get; set; }
+        public int BPM { get; set; } = 0;
 
-        public string Key { get; set; }
-        public string path { get; set; }
-        public string Artists { get; set; }
+        public string Key { get; set; } = "";
+        public string path { get; set; } = "";
+        public string Artists { get; set; } = "";
+
+        public int index = 0;
         public List<string> ArtistsList {
             get {
                 List<string> rtn = new List<string>();

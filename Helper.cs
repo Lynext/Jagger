@@ -41,5 +41,18 @@ namespace Jagger
                 song.Artists = tfile.Tag.Performers[0];
             return song;
         }
+
+        public static void calculateAllArtists()
+        {
+            Vars.allArtists.Clear();
+            foreach (Song i in Vars.songList)
+            {
+                foreach (string x in i.ArtistsList)
+                {
+                    if (!string.IsNullOrWhiteSpace(x) && !Vars.allArtists.Contains(x))
+                        Vars.allArtists.Add(x);
+                }
+            }
+        }
     }
 }

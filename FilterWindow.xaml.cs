@@ -39,6 +39,35 @@ namespace Jagger
                 BPMStart.Visibility = Visibility.Hidden;
                 BPMLine.Visibility = Visibility.Hidden;
             }
+            ArtistsBox.Items.Clear();
+            foreach (string i in Vars.allArtists)
+            {
+                ListBoxItem lbi = new ListBoxItem();
+                CheckBox cb = new CheckBox();
+                cb.Content = i;
+                cb.PreviewMouseLeftButtonDown += clickedCheckboxItemArtist;
+                if (Vars.artistsFilter.Contains(i))
+                    cb.IsChecked = true;
+                lbi.PreviewMouseLeftButtonDown += clickedListBoxItemArtist;
+                lbi.Content = cb;
+                ArtistsBox.Items.Add(lbi);
+            }
+        }
+
+        public void clickedCheckboxItemArtist(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+        }
+        public void clickedListBoxItemArtist(object sender, MouseButtonEventArgs e)
+        {
+            ListBoxItem item = (ListBoxItem)sender;
+            CheckBox item2 = (CheckBox)item.Content;
+            item2.IsChecked = !item2.IsChecked;
+            if (item2.IsChecked == true)
+                Vars.artistsFilter.Add((string)item2.Content);
+            else
+                Vars.artistsFilter.Remove((string)item2.Content);
+            Vars.main.updateList();
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
