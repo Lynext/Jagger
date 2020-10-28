@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using Microsoft.Win32;
+using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -103,34 +104,20 @@ namespace Jagger
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
+            var ookiiDialog = new VistaFolderBrowserDialog();
+            if (ookiiDialog.ShowDialog() == true)
             {
-                Vars.csvPath = openFileDialog.FileName;
-                Vars.csvFolderPath = System.IO.Path.GetDirectoryName(Vars.csvPath);
+                Vars.folderPath = ookiiDialog.SelectedPath;
                 Vars.songList.Clear();
-                using (var reader = new StreamReader(openFileDialog.FileName))
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                List<string> files = Directory.GetFiles(Vars.folderPath).ToList();
+                foreach (string i in files)
                 {
-                    csv.Read();
-                    csv.ReadHeader();
-                    while (csv.Read())
-                    {
-                        var record = new Song
-                        {
-                            Name = csv.GetField("Name"),
-                            BPM = csv.GetField<int>("BPM"),
-                            Key = csv.GetField("Key"),
-                            Artists = csv.GetField("Artists")
-                        };
-                        Vars.songList.Add(record);
-                    }
+                    Vars.songList.Add(Helper.getFromFile(i));
                 }
-                
                 updateList();
             }
 
-            
+
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -158,45 +145,11 @@ namespace Jagger
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            using (var writer = new StreamWriter(Vars.csvPath))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                csv.WriteRecords(Vars.songList);
-            }
-            bool successful = true;
-            List<string> files = Directory.GetFiles(Vars.csvFolderPath).ToList<string>();
             foreach (Song i in Vars.songList)
             {
-                int exists = 0;
-                foreach (string x in files)
-                {
-                    if (x.ToLower().Contains(i.Name.ToLower()))
-                    {
-                        exists++;
-                    }
-                }
-                if (exists == 0)
-                {
-                    MessageBox.Show("Couldn't find file containing name " + i.Name);
-                    successful = false;
-                    continue;
-                }
-                if (exists > 1)
-                {
-                    MessageBox.Show("Multiple files containing name " + i.Name);
-                    successful = false;
-                    continue;
-                }
-
+                Helper.SetID3(i, i.path);
             }
-            if (successful)
-            {
-                MessageBox.Show("Save successful.");
-            }
-            else
-            {
-                MessageBox.Show("Save unsuccessful.");
-            }
+            MessageBox.Show("Save successful", "Jagger", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

@@ -8,8 +8,7 @@ namespace Jagger
 {
     public static class Vars
     {
-        public static string csvPath = "";
-        public static string csvFolderPath = "";
+        public static string folderPath = "";
         public static MainWindow main = null;
         public static FilterWindow filterWindow = null;
         public static EditorWindow editorWindow = null;
