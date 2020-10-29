@@ -16,20 +16,20 @@
     <Grid>
         <TextBox x:Name="NameBox" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Width="328"/>
         <TextBox x:Name="ArtistsBox" HorizontalAlignment="Left" Height="23" Margin="10,38,0,0" TextWrapping="Wrap" Text="Artists" VerticalAlignment="Top" Width="328"/>
-        <Button Content="Next" HorizontalAlignment="Left" Margin="618,196,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" IsDefault="True"/>
-        <Button Content="Previous" HorizontalAlignment="Left" Margin="517,196,0,0" VerticalAlignment="Top" Width="96" Click="Button_Click_1"/>
-        <Label x:Name="IndexLabel" Content="Label" HorizontalAlignment="Left" Margin="343,10,0,0" VerticalAlignment="Top"/>
+        <Button Content="Next" HorizontalAlignment="Right" Margin="0,0,10,10" Width="75" Click="Button_Click" IsDefault="True" Height="32" VerticalAlignment="Bottom"/>
+        <Button Content="Previous" HorizontalAlignment="Right" Margin="0,0,90,10" Width="96" Click="Button_Click_1" Height="32" VerticalAlignment="Bottom"/>
+        <Label x:Name="IndexLabel" Content="Label" HorizontalAlignment="Left" Margin="343,10,0,0" VerticalAlignment="Top" FontSize="11"/>
         <Label x:Name="BPMLabel"  Content="0 BPM" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top"/>
         <Label x:Name="KeyLabel" Content="1A" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name ="SongList"  HorizontalAlignment="Left" Height="181" Margin="395,10,0,0" VerticalAlignment="Top" Width="298">
+        <ListBox x:Name ="SongList" Margin="395,10,10,47">
             <ListBoxItem Content="Hidra - AAA" FontSize="8" Background="#FF29805C"/>
             <ListBoxItem Content="Hidra - AAA" FontSize="8" Background="#FF802929"/>
 
         </ListBox>
         <Image x:Name="OKImage" Margin="343,34,0,0" Source="icons8-delete-64.png" Stretch="Fill" HorizontalAlignment="Left" Width="38" Height="37" VerticalAlignment="Top"/>
-        <CheckBox x:Name="OnlyShowWrong" Content="Only show wrong formatted songs." HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-        <Label x:Name="CompletedLabel" Content="%2 Completed" HorizontalAlignment="Left" Margin="395,204,0,0" VerticalAlignment="Top" Width="117"/>
-        <ProgressBar x:Name="CompletedBar" HorizontalAlignment="Left" Height="10" Margin="395,194,0,0" VerticalAlignment="Top" Width="117" Background="#FF802929" Value="50" Foreground="#FF29805C"/>
+        <CheckBox x:Name="OnlyShowWrong" Content="Only show wrong formatted songs." HorizontalAlignment="Left" Margin="10,0,0,10" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Height="18" VerticalAlignment="Bottom"/>
+        <Label x:Name="CompletedLabel" Content="%2 Completed" HorizontalAlignment="Right" Margin="0,0,191,10" Width="117" Height="24" VerticalAlignment="Bottom"/>
+        <ProgressBar x:Name="CompletedBar" HorizontalAlignment="Right" Height="10" Margin="0,0,191,34" Width="117" Background="#FF802929" Value="50" Foreground="#FF29805C" VerticalAlignment="Bottom"/>
 
     </Grid>
 </Window>
