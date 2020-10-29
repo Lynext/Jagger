@@ -63,9 +63,8 @@ namespace Jagger
             if (listViewSortCol != null)
             {
                 AdornerLayer.GetAdornerLayer(listViewSortCol).Remove(listViewSortAdorner);
-                SongList.Items.SortDescriptions.Clear();
             }
-
+            SongList.Items.SortDescriptions.Clear();
             ListSortDirection newDir = ListSortDirection.Ascending;
             if (listViewSortCol == column && listViewSortAdorner.Direction == newDir)
                 newDir = ListSortDirection.Descending;
@@ -158,7 +157,7 @@ namespace Jagger
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (Vars.editorWindow != null || Vars.filterWindow != null)
+            if (Vars.editorWindow != null || Vars.filterWindow != null || Vars.songInfoWindow != null)
             {
                 MessageBox.Show("Close other windows before loading.", "Jagger", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -211,6 +210,19 @@ namespace Jagger
             }
             MessageBox.Show("Save successful", "Jagger", MessageBoxButton.OK, MessageBoxImage.Information);
             Vars.unsavedContent = false;
+        }
+
+        private void SongList_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (Vars.songInfoWindow != null)
+                return;
+            Song item = (Song)(((ListView)sender).SelectedItem);
+            if (item != null)
+            {
+                SongInfoWindow siw = new SongInfoWindow();
+                siw.loadSong(item);
+                siw.Show();
+            }
         }
     }
 }

@@ -92,6 +92,10 @@
     </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="Song.cs" />
+    <Compile Include="SongInfoWindow.xaml.cs">
+      <DependentUpon>SongInfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SongSimilarityClass.cs" />
     <Compile Include="SortAdorner.cs" />
     <Compile Include="Vars.cs" />
     <Compile Include="FilterWindow.xaml.cs">
@@ -114,6 +118,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="FilterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SongInfoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

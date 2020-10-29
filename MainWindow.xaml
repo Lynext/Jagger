@@ -16,7 +16,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}" Closing="Window_Closing">
     <Grid>
         <Label Content="Jagger" HorizontalContentAlignment="Center" Margin="10,10,10,0" FontFamily="Giddyup Std" FontSize="48" VerticalAlignment="Top"/>
-        <ListView x:Name = "SongList" Margin="10,85,10,10" Background="#FF303030">
+        <ListView x:Name = "SongList" Margin="10,85,10,10" Background="#FF303030" PreviewMouseDoubleClick="SongList_PreviewMouseDoubleClick">
 
             <ListView.View>
                 <GridView>

@@ -16,6 +16,21 @@ namespace Jagger
             return rtn;
         }
 
+        public static int getKeyInt(string key)
+        {
+            return Int32.Parse(key.Substring(0, key.Length - 1));
+        }
+
+        public static int getKeyDiff(string key1, string key2)
+        {
+            int k1 = getKeyInt(key1);
+            int k2 = getKeyInt(key2);
+            int diff1 = Math.Abs(k1 - k2);
+            int diff2 = Math.Abs(12 - diff1);
+            return Math.Min(diff1, diff2);
+        }
+
+
         public static void SetID3(Song song, string filePath)
         {
             string newPath = Vars.folderPath + "/" + song.FullName + Path.GetExtension(filePath);

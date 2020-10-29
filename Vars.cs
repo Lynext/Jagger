@@ -12,6 +12,7 @@ namespace Jagger
         public static MainWindow main = null;
         public static FilterWindow filterWindow = null;
         public static EditorWindow editorWindow = null;
+        public static SongInfoWindow songInfoWindow = null;
         public static List<Song> songList = new List<Song>();
         public static bool unsavedContent = false;
         public static List<string> allArtists = new List<string>();
