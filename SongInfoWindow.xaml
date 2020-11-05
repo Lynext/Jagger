@@ -23,7 +23,7 @@
                     <GridViewColumn Width="250" DisplayMemberBinding="{Binding Name}">
                         <GridViewColumnHeader Tag="Name" Click="lvUsersColumnHeader_Click" Content="Name"/>
                     </GridViewColumn>
-                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding BPM}">
+                    <GridViewColumn Width="100" DisplayMemberBinding="{Binding BPMString}">
                         <GridViewColumnHeader Tag="BPM" Click="lvUsersColumnHeader_Click" Content="BPM"/>
                     </GridViewColumn>
                     <GridViewColumn Width="100" DisplayMemberBinding="{Binding Key}">
