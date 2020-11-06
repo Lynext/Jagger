@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace Jagger
 {
@@ -52,6 +53,18 @@ namespace Jagger
             song.BPM = (int)tfile.Tag.BeatsPerMinute;
             song.Name = tfile.Tag.Title;
             song.Key = tfile.Tag.InitialKey;
+
+            TagLib.IPicture pic = tfile.Tag.Pictures[0];
+            MemoryStream ms = new MemoryStream(pic.Data.Data);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.StreamSource = ms;
+            bitmap.EndInit();
+
+            song.Image = bitmap;
+
             if (tfile.Tag.Performers.Length > 0)
                 song.Artists = tfile.Tag.Performers[0];
             return song;

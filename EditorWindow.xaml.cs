@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Jagger
 {
@@ -21,10 +22,26 @@ namespace Jagger
     public partial class EditorWindow : Window
     {
         int index = 0;
+
+        private MediaPlayer mediaPlayer = new MediaPlayer();
+        private bool isPlaying = false;
+        private DispatcherTimer timer;
         public EditorWindow()
         {
             InitializeComponent();
             Vars.editorWindow = this;
+
+            mediaPlayer.MediaOpened += PreviewMedia_MediaOpened;
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += timer_Tick;
+            timer.Start();
+        }
+
+        void PreviewMedia_MediaOpened(object sender, object e)
+        {
+            SongPosition.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+            TimeLabel.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
         }
 
         public void updateList()
@@ -76,6 +93,14 @@ namespace Jagger
             saveCurrent();
             Vars.main.updateList();
             Vars.editorWindow = null;
+            timer.Stop();
+            mediaPlayer.Close();
+        }
+
+        void timer_Tick(object sender, EventArgs e)
+        {
+            SongPosition.Value = mediaPlayer.Position.TotalSeconds;
+            TimeLabel.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
         }
 
         public void saveCurrent()
@@ -121,6 +146,15 @@ namespace Jagger
             {
                 OKImage.Source = new BitmapImage(new Uri(@"/Jagger;component/icons8-delete-64.png", UriKind.Relative));
             }
+            AlbumImage.Source = Vars.songList[realSongIndex].Image;
+            if (isPlaying)
+            {
+                mediaPlayer.Pause();
+                PlayButton.Content = "Play";
+                isPlaying = false;
+            }
+            SongPosition.Value = 0;
+            mediaPlayer.Open(new Uri(Vars.songList[realSongIndex].path));
             Vars.main.updateList();
             updateList();
         }
@@ -161,6 +195,36 @@ namespace Jagger
             index = 0;
             loadIndex(index);
             updateList();
+        }
+
+        private void VolumePosition_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            mediaPlayer.Volume = VolumePosition.Value;
+        }
+
+        private void PlayButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (isPlaying == false)
+            {
+                isPlaying = true;
+                (sender as Button).Content = "Pause";
+                mediaPlayer.Play();
+            }
+            else
+            {
+                (sender as Button).Content = "Play";
+                mediaPlayer.Pause();
+                isPlaying = false;
+            }
+        }
+
+        private void SongPosition_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (e.NewValue - e.OldValue != 1)
+            {
+                mediaPlayer.Position = TimeSpan.FromSeconds(e.NewValue);
+                TimeLabel.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
+            }
         }
     }
 }

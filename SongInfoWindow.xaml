@@ -12,12 +12,12 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Song Info" Height="413.5" Width="862.5" Loaded="Window_Loaded" Closed="Window_Closed">
+        Title="Song Info" Height="649.525" Width="862.5" Loaded="Window_Loaded" Closed="Window_Closed">
     <Grid>
         <Label HorizontalContentAlignment="Center" x:Name="SongNameLabel" Content="Label" Margin="10,10,10,0" VerticalAlignment="Top" FontFamily="Corbel Light" FontSize="20"/>
         <Label HorizontalContentAlignment="Center" x:Name="BPMLabel" Content="150 BPM" Margin="10,47,0,0" VerticalAlignment="Top" FontFamily="Segoe UI Black" FontSize="20" HorizontalAlignment="Left" Width="95"/>
         <Label HorizontalContentAlignment="Center" x:Name="KeyLabel" Content="11A" Margin="10,84,0,0" VerticalAlignment="Top" FontFamily="Segoe UI Black" FontSize="20" HorizontalAlignment="Left" Width="95"/>
-        <ListView x:Name = "SongSimilarityList" Margin="10,124,10,10" Background="#FF303030">
+        <ListView x:Name = "SongSimilarityList" Margin="10,314,10,10" Background="#FF303030" PreviewMouseDoubleClick="SongSimilarityList_PreviewMouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="250" DisplayMemberBinding="{Binding Name}">
@@ -46,6 +46,10 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
+        <Image x:Name="AlbumImage" Margin="10,47,10,0" Height="149" VerticalAlignment="Top"/>
+        <Slider x:Name="SongPosition" HorizontalAlignment="Left" VerticalAlignment="Top" Height="19" Width="462" Margin="10,220,0,0" SmallChange="1" ValueChanged="SongPosition_ValueChanged" IsMoveToPointEnabled="True"/>
+        <Button x:Name="PlayButton" Content="Play" HorizontalAlignment="Left" Margin="477,218,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Slider x:Name="VolumePosition" HorizontalAlignment="Left" VerticalAlignment="Top" Height="19" Width="95" Margin="10,257,0,0" SmallChange="0.05" IsMoveToPointEnabled="True" Maximum="1" LargeChange="0.1" Foreground="#FF3AB1B7" ValueChanged="VolumePosition_ValueChanged" Value="0.5"/>
+        <Label x:Name="TimeLabel"  Content="0:00 / 0:00" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="10,196,0,0" Width="462" Height="24" VerticalAlignment="Top"/>
     </Grid>
 </Window>

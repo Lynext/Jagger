@@ -12,7 +12,7 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Editor" Height="269" Width="711" Loaded="Window_Loaded" Closed="Window_Closed">
+        Title="Editor" Height="530" Width="937" Loaded="Window_Loaded" Closed="Window_Closed">
     <Grid>
         <TextBox x:Name="NameBox" HorizontalAlignment="Left" Height="23" Margin="10,10,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Width="328"/>
         <TextBox x:Name="ArtistsBox" HorizontalAlignment="Left" Height="23" Margin="10,38,0,0" TextWrapping="Wrap" Text="Artists" VerticalAlignment="Top" Width="328"/>
@@ -21,7 +21,7 @@
         <Label x:Name="IndexLabel" Content="Label" HorizontalAlignment="Left" Margin="343,10,0,0" VerticalAlignment="Top" FontSize="11"/>
         <Label x:Name="BPMLabel"  Content="0 BPM" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top"/>
         <Label x:Name="KeyLabel" Content="1A" HorizontalAlignment="Left" Margin="10,95,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name ="SongList" Margin="395,10,10,47">
+        <ListBox x:Name ="SongList" Margin="502,10,10,47">
             <ListBoxItem Content="Hidra - AAA" FontSize="8" Background="#FF29805C"/>
             <ListBoxItem Content="Hidra - AAA" FontSize="8" Background="#FF802929"/>
 
@@ -30,6 +30,11 @@
         <CheckBox x:Name="OnlyShowWrong" Content="Only show wrong formatted songs." HorizontalAlignment="Left" Margin="10,0,0,10" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Height="18" VerticalAlignment="Bottom"/>
         <Label x:Name="CompletedLabel" Content="%2 Completed" HorizontalAlignment="Right" Margin="0,0,191,10" Width="117" Height="24" VerticalAlignment="Bottom"/>
         <ProgressBar x:Name="CompletedBar" HorizontalAlignment="Right" Height="10" Margin="0,0,191,34" Width="117" Background="#FF802929" Value="50" Foreground="#FF29805C" VerticalAlignment="Bottom"/>
+        <Image x:Name="AlbumImage" Margin="10,119,0,137" HorizontalAlignment="Left" Width="487"/>
+        <Slider x:Name="SongPosition" HorizontalAlignment="Left" Width="352" Margin="25,0,0,84" SmallChange="1" ValueChanged="SongPosition_ValueChanged" IsMoveToPointEnabled="True" Height="19" VerticalAlignment="Bottom"/>
+        <Button x:Name="PlayButton" Content="Play" HorizontalAlignment="Left" Margin="382,0,0,73" Width="75" Height="32" VerticalAlignment="Bottom" Click="PlayButton_Click"/>
+        <Slider x:Name="VolumePosition" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="19" Width="95" Margin="25,0,0,47" SmallChange="0.05" IsMoveToPointEnabled="True" Maximum="1" LargeChange="0.1" Foreground="#FF3AB1B7" ValueChanged="VolumePosition_ValueChanged" Value="0.5" RenderTransformOrigin="0.895,0.395"/>
+        <Label x:Name="TimeLabel"  Content="0:00 / 0:00" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Margin="25,0,0,108" Width="352" Height="24" VerticalAlignment="Bottom"/>
 
     </Grid>
 </Window>

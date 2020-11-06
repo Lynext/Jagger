@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace Jagger
 {
@@ -42,6 +43,8 @@ namespace Jagger
         public string Key { get; set; } = "";
         public string path { get; set; } = "";
         public string Artists { get; set; } = "";
+
+        public BitmapImage Image { get; set; } = null;
 
         public int index = 0;
         public List<string> ArtistsList {
