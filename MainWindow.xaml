@@ -50,6 +50,8 @@
         <Label x:Name="resultNumberLabel" Content="Results : 0/0" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top"/>
         <Button Content="Editor" HorizontalAlignment="Left" Margin="220,10,0,0" VerticalAlignment="Top" Width="100" Height="44" FontSize="18" Click="Button_Click_2"/>
         <Button Content="Save" HorizontalAlignment="Right" Margin="0,7,10,0" VerticalAlignment="Top" Width="100" Height="44" FontSize="18" Click="Button_Click_3"/>
+        <Button Content="Clear All" HorizontalAlignment="Left" Margin="325,10,0,0" VerticalAlignment="Top" Width="123" Height="19" FontSize="12" Background="#FFB73A3A" BorderBrush="#FF680606" Click="Button_Click_4"/>
+        <Button Content="Find Duplicates" HorizontalAlignment="Left" Margin="325,34,0,0" VerticalAlignment="Top" Width="123" Height="21" FontSize="12" Background="#FF3A84B7" BorderBrush="#FF065B68" Click="Button_Click_5"/>
 
     </Grid>
 </Window>

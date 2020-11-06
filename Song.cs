@@ -11,7 +11,6 @@ namespace Jagger
 {
     public class Song
     {
-
         public bool checkFormat()
         {
             if (string.IsNullOrWhiteSpace(Artists))
@@ -61,15 +60,6 @@ namespace Jagger
                 }
                 return rtn;
                 } 
-        }
-    }
-
-    public sealed class SongMap : ClassMap<Song>
-    {
-        public SongMap()
-        {
-            AutoMap(CultureInfo.InvariantCulture);
-            Map(m => m.ArtistsList).Ignore();
         }
     }
 }

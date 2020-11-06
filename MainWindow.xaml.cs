@@ -224,5 +224,65 @@ namespace Jagger
                 siw.Show();
             }
         }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult dialogResult = MessageBox.Show("Are you REALLY REALLY REALLY REALLY REALLY sure you want to clear all Songs' Name and Artists tags ?", "Jagger", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+            if (dialogResult == MessageBoxResult.Yes)
+            {
+                foreach (Song i in Vars.songList)
+                {
+                    i.Artists = "";
+                    i.Name = System.IO.Path.GetFileNameWithoutExtension(i.path);
+                }
+                updateList();
+                MessageBox.Show("Done.", "Jagger", MessageBoxButton.OK, MessageBoxImage.Information);
+                Vars.unsavedContent = true;
+            }
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            Dictionary<string, List<string>> d = new Dictionary<string, List<string>>();
+            foreach (Song i in Vars.songList)
+            {
+                string s = i.BPM.ToString() + " BPM, " + i.Key;
+                if (d.ContainsKey(s))
+                {
+                    d[s].Add(i.FullName);
+                }
+                else
+                {
+                    List<string> lst = new List<string>();
+                    lst.Add(i.FullName);
+                    d.Add(s, lst);
+                }
+            }
+
+            int ind = 0;
+            int sz = 0;
+
+            foreach (string i in d.Keys)
+            {
+                if (d[i].Count > 1)
+                    sz++;
+            }
+
+            foreach (string i in d.Keys)
+            {
+                if (d[i].Count <= 1)
+                    continue;
+
+                ind++;
+                string msg = ind.ToString() + " / " + sz.ToString() + "\n\n" + i + "\n\nThese songs could be same. Please check : \n\n";
+                foreach (string x in d[i])
+                {
+                    msg += x + "\n\n";
+                }
+                MessageBoxResult dialogResult = MessageBox.Show(msg, "Jagger", MessageBoxButton.YesNo, MessageBoxImage.None);
+                if (dialogResult == MessageBoxResult.No)
+                    break;
+            }
+        }
     }
 }
