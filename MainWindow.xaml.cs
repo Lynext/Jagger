@@ -36,6 +36,7 @@ namespace Jagger
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Title = "Jagger " + Vars.version;
             if (Properties.Settings.Default.FolderLocation == "None" || !Directory.Exists((string)Properties.Settings.Default.FolderLocation))
             {
                 if (!selectMainFolder())

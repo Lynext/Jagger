@@ -104,7 +104,7 @@ namespace Jagger
         void PreviewMedia_MediaOpened(object sender, object e)
         {
             SongPosition.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
-            TimeLabel.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
+            //TimeLabel.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -117,7 +117,7 @@ namespace Jagger
         void timer_Tick(object sender, EventArgs e)
         {
             SongPosition.Value = mediaPlayer.Position.TotalSeconds;
-            TimeLabel.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
+            //TimeLabel.Content = String.Format("{0} / {1}", mediaPlayer.Position.ToString(@"mm\:ss"), mediaPlayer.NaturalDuration.TimeSpan.ToString(@"mm\:ss"));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

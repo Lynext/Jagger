@@ -8,6 +8,7 @@ namespace Jagger
 {
     public static class Vars
     {
+        public static string version = "v0.1";
         public static string folderPath = "";
         public static MainWindow main = null;
         public static FilterWindow filterWindow = null;
