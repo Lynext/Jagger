@@ -134,6 +134,8 @@ namespace Jagger
                 if (!(i.EndsWith(".mp3") || i.EndsWith(".m4a")))
                     continue;
                 Song newSong = Helper.getFromFile(i);
+                if (newSong == null)
+                    continue;
                 newSong.index = Vars.songList.Count();
                 Vars.songList.Add(newSong);
             }

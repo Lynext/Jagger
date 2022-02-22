@@ -48,35 +48,44 @@ namespace Jagger
         public static Song getFromFile(string filePath)
         {
             Song song = new Song();
-            var tfile = TagLib.File.Create(filePath);
-            song.path = filePath;
-            song.BPM = (int)tfile.Tag.BeatsPerMinute;
-            song.Name = tfile.Tag.Title;
-            song.Key = tfile.Tag.InitialKey;
-
-            if (tfile.Tag.Pictures.Length > 0)
+            try
             {
-                try
-                {
-                    TagLib.IPicture pic = tfile.Tag.Pictures[0];
-                    MemoryStream ms = new MemoryStream(pic.Data.Data);
-                    ms.Seek(0, SeekOrigin.Begin);
+                var tfile = TagLib.File.Create(filePath);
+                song.path = filePath;
+                song.BPM = (int)tfile.Tag.BeatsPerMinute;
+                song.Name = tfile.Tag.Title;
+                song.Key = tfile.Tag.InitialKey;
 
-                    BitmapImage bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.StreamSource = ms;
-                    bitmap.EndInit();
-
-                    song.Image = bitmap;
-                }
-                catch (Exception e)
+                if (tfile.Tag.Pictures.Length > 0)
                 {
-                    Console.WriteLine("Error when loading album cover on Song " + song.FullName + ".");
+                    try
+                    {
+                        TagLib.IPicture pic = tfile.Tag.Pictures[0];
+                        MemoryStream ms = new MemoryStream(pic.Data.Data);
+                        ms.Seek(0, SeekOrigin.Begin);
+
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.StreamSource = ms;
+                        bitmap.EndInit();
+
+                        song.Image = bitmap;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Error when loading album cover on Song " + song.FullName + ".");
+                    }
                 }
+
+                if (tfile.Tag.Performers.Length > 0)
+                    song.Artists = tfile.Tag.Performers[0];
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Could not import song " + filePath);
+                return null;
             }
 
-            if (tfile.Tag.Performers.Length > 0)
-                song.Artists = tfile.Tag.Performers[0];
             return song;
         }
 
